@@ -1,5 +1,5 @@
 # PSRepo #
-Gonna try and collect all the various scripts I've made into one place because this is getting a bit ridiculous.
+Gonna try and collect all the various scripts I've made into one place because this is getting a bit ridiculous. Everything here is more proof of concept than useable - never use these in a production setting without confirming for yourself it won't cause issues.
 
 #### Byond ###
 Scripts tied to the BYOND game engine
