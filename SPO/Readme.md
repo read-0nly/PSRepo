@@ -19,4 +19,4 @@ So what happens if the value is not null, but rather empty?
 So this script sets the template to itself, because it was meant to document the fix when I figured it out. Swap out the self-reference in that line with null and you have a fix for the issue
 
 ### List Permission Mapper ##
-Maps out the permissions set throughout a list or document library
+Maps out the permissions set throughout a list or document library recursively
