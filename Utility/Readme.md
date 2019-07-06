@@ -9,6 +9,9 @@ Goes through 2 folders and compares all files, first for name match, then for ha
 ### Generic Script Tools ##
 Things that are good to have in most scripts. Right now just a quick way to configure powershell to meet module and script requirements before continuing. Gonna have some pre-generated winforms too to make GUI easier to implement, just gotta build the things.
 
+### LogCollector ##
+Set the current scenario to the scenario in question, then send as-is to be run on affected device - collects relevant logs for scenario, all in folder on desktop. Easier that asking them to export the logs themselves.
+
 ### InterTransmission ##
 Transmits text (or a text file) to a window using SendKeys
 
