@@ -6,6 +6,9 @@ Changes all the file extensions in a folder to .jpg
 ### Compare for Dupes ##
 Goes through 2 folders and compares all files, first for name match, then for hash match, and tries to automate clearing out the dupes as much as possible. Defers to user when it's not obvious how to proceed.
 
+### Del Onenote Printer ##
+Onenote 2016 keeps adding the printer back - if you're adamant not to have it you can add this as a service to run when idle or on logon. It'll delete it every time it runs, if it exists. Might need to remove any echos/write-hosts.
+
 ### Generic Script Tools ##
 Things that are good to have in most scripts. Right now just a quick way to configure powershell to meet module and script requirements before continuing. Gonna have some pre-generated winforms too to make GUI easier to implement, just gotta build the things.
 
