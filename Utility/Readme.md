@@ -12,6 +12,8 @@ Onenote 2016 keeps adding the printer back - if you're adamant not to have it yo
 ### Generic Script Tools ##
 Things that are good to have in most scripts. Right now just a quick way to configure powershell to meet module and script requirements before continuing. Gonna have some pre-generated winforms too to make GUI easier to implement, just gotta build the things.
 
+EDIT: Otherwise, use Requires - it's much easier: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_requires?view=powershell-6
+
 ### LogCollector ##
 Set the current scenario to the scenario in question, then send as-is to be run on affected device - collects relevant logs for scenario, all in folder on desktop. Easier that asking them to export the logs themselves.
 
