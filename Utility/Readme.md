@@ -17,6 +17,12 @@ EDIT: Otherwise, use Requires - it's much easier: https://docs.microsoft.com/en-
 ### LogCollector ##
 Set the current scenario to the scenario in question, then send as-is to be run on affected device - collects relevant logs for scenario, all in folder on desktop. Easier that asking them to export the logs themselves.
 
+### Mounter ###
+Make a powershell shortcut to it, drop vhd file on the shortcut. it either attaches or detaches (mounts/unmounts) the vhd file depending on the current state. So drop to mount, and once you're done, drop again to unmount.
+
+Example Shortcut: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -file "c:\VHD\mounter.ps1"
+#### Windows 7 compatible since it doesn't use the mount cmdlets ####
+
 ### InterTransmission ##
 Transmits text (or a text file) to a window using SendKeys
 
