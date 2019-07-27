@@ -17,6 +17,8 @@ EDIT: Otherwise, use Requires - it's much easier: https://docs.microsoft.com/en-
 ### LogCollector ##
 Set the current scenario to the scenario in question, then send as-is to be run on affected device - collects relevant logs for scenario, all in folder on desktop. Easier that asking them to export the logs themselves.
 
+EDIT: Or just use MdmDiagnosticsTool.exe and define custom "areas" in the registry and it's maybe cleaner for you, especially if it's a scenario you expect to collect logs from a device for often. I have to stop finding things that make my things obsolete lol
+
 ### Mounter ###
 Make a powershell shortcut to it, drop vhd file on the shortcut. it either attaches or detaches (mounts/unmounts) the vhd file depending on the current state. So drop to mount, and once you're done, drop again to unmount.
 
