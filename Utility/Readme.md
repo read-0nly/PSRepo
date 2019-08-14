@@ -29,10 +29,9 @@ Example Shortcut: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -fil
 Transmits text (or a text file) to a window using SendKeys
 
 ### Set AAD AutoLogon ##    
-Intune's kiosk mode has a nice "Autologon" feature, but this creates a local account, and MSfB apps need an AAD acct to license.
+Intune's kiosk mode has a nice "Autologon" feature, but this creates a local account, and MSfB apps need an AAD acct to online-license.
 Instead, you can target AAD users for kiosk then deploy this alongside the kiosk profile to configure autologon for that kiosk AAD user
 
-I really wanted this to work but it doesn't quite work as hoped. Licensing is hard guys.
 
 ### Set Wallpaper ##
 Maybe this should be under MDMTools, sets the wallpaper of the current user. Gets around the Enterprise requirement of "Set desktop background" in Intune
