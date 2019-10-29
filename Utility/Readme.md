@@ -9,6 +9,9 @@ Goes through 2 folders and compares all files, first for name match, then for ha
 ### Del Onenote Printer ##
 Onenote 2016 keeps adding the printer back - if you're adamant not to have it you can add this as a service to run when idle or on logon. It'll delete it every time it runs, if it exists. Might need to remove any echos/write-hosts.
 
+### Forced Error ##
+Fails consistently, like my love life. Handy to make sure something isn't swallowing output in a way that makes it look like it's working.
+
 ### Generic Script Tools ##
 Things that are good to have in most scripts. Right now just a quick way to configure powershell to meet module and script requirements before continuing. Gonna have some pre-generated winforms too to make GUI easier to implement, just gotta build the things.
 
