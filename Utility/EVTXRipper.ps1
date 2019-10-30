@@ -9,7 +9,47 @@ $EvtLvlColors = @{
     "Error" = "Red";
     "Critical" = "Magenta"
 }
-
+$ErrorCodeRefURLs = @{
+	"0x[0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F][0-9a-fA-F]" = @( #0x00000000 codes - First scan for all 8, then scan for all 4
+		"https://docs.microsoft.com/en-us/intune/enrollment/troubleshoot-windows-enrollment-errors",
+		"https://docs.microsoft.com/en-us/windows/deployment/windows-autopilot/known-issues",
+		"https://docs.microsoft.com/en-us/sccm/comanage/how-to-monitor",
+		"https://docs.microsoft.com/en-us/windows/win32/taskschd/task-scheduler-error-and-success-constants",
+		"https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-error-codes",
+		"https://docs.microsoft.com/en-us/windows/deployment/update/windows-update-errors",
+		"https://docs.microsoft.com/en-us/windows/deployment/update/windows-update-error-reference",
+		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/705fb797-2175-4a90-b5a3-3918024b10b8",
+		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55",
+		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/18d8fbe8-a967-4f1c-ae50-99ca8e491d2d",
+		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-vds/5102cc53-3143-4268-ba4c-6ea39e999ab4",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--0-499-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--500-999-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--1000-1299-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--1300-1699-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--1700-3999-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--4000-5999-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--6000-8199-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--8200-8999-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--9000-11999-",
+		"https://docs.microsoft.com/en-us/windows/win32/debug/system-error-codes--12000-15999-",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-1",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-2",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-3",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-4",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-5",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-6",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-7",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-8",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-9",
+		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-10",
+		"https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values",
+		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-vds/5102cc53-3143-4268-ba4c-6ea39e999ab4"
+	);
+	"AADSTS[0-9]+" = @( #AADSTS codes
+		"https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes",
+		"https://docs.microsoft.com/en-us/azure/active-directory/reports-monitoring/reference-sign-ins-error-codes"
+	)
+}
 
 function introFetch(){
     introwatermark(-1) 
@@ -17,16 +57,23 @@ function introFetch(){
 }
 
 function introWatermark($i){
+    #V0.1
+        #Created base script that pulls all events and returns unique per ID
+    #V0.2
+        #Created Error Code extractor
+    #V0.3
+        #Autodocs pull
     $wmLine  = "------------------------------------------------"
-    $wmTitle = "-------:        EVTXRipper  v0.1:        -------"
+    $wmTitle = "-------:        EVTXRipper  v0.2:        -------"
     $wmState = @(
                "-------:   FETCHING WORKING DIRECTORY:   -------",
                "-------:    INITIALIZING EVENT ARRAY:    -------",
-               "-------:       GROUPING  EVENTIDS:       -------",
+               "-------:       GROUPING EVENT IDS:       -------",
+               "-------:     GATHERING  ERROR CODES:     -------",
                "-------:       OUTPUTING  RESULTS:       -------",
                "-------:        SAVING IS CARING:        -------"
                )
-    $wmColor =@("Red","Yellow","Green","Cyan", "Magenta")
+    $wmColor =@("Red","Yellow","Green","Cyan", "Magenta", "White")
     cls
     start-sleep -Milliseconds 5
     write-host $wmLine -ForegroundColor white
@@ -55,18 +102,38 @@ function introWatermark($i){
 }
 
 function runEvtxRipper(){
+    #Load all events from evtx files
     introWatermark(0)
-    $AllEvents = get-winevent -path ($workdir + "\*.evtx")
+    $script:AllEvents = get-winevent -path ($workdir + "\*.evtx")
+    #Group all events by ID and provider
     introWatermark(1)
-    $AllGrouped = ($AllEvents | group id, providername)
+    $script:AllGrouped = ($AllEvents | group id, providername)
+    #GetErrorCodes
     introWatermark(2)
-    $AllUniques = $AllGrouped | %{($_.group | sort-object timecreated)[0]}
-    $Selection = @("level", "leveldisplayname", "timecreated", "message", "id", "logname", "processid", "machinename", "userid", "containerlog")
-    $AllUniques | sort-object timecreated | select-object -property $selection | out-gridview -title "All Unique EventIDs - First Occurence"
+    $script:allerrorcodes = @{}
+    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[0]; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
+    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[1]; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
     introWatermark(3)
+    $script:AllUniques = $script:AllGrouped | %{($_.group | sort-object timecreated)[0]}
+    $Selection = @("leveldisplayname", "id", "timecreated", "errorcode", "message", "level", "logname", "processid", "machinename", "userid", "containerlog")
+    $Script:UniquesWithError = $script:AllUniques | %{[pscustomobject]@{
+        "level"=$_.level;
+        "leveldisplayname"=$_.leveldisplayname;
+        "timecreated"=$_.timecreated;
+        "message"=$_.message;
+        "id"=$_.id;
+        "logname"=$_.logname;
+        "processid"=$_.processid;
+        "machinename"=$_.machinename;
+        "userid"=$_.userid;
+        "containerlog"=$_.containerlog;
+        "errorcode"=$AllErrorCodes[$_]
+        }} | sort-object timecreated| select-object -Property $Selection| out-gridview -title "All Unique EventIDs - First Occurence"
+    introWatermark(4)
     $AllEventsPath = $null
     write-host
     write-host
+
     if((read-host "Enter 'Y' to export All Events to csv").ToUpper() -eq "Y"){
         $AllEventsPath = (read-host "Enter path to directory to save file ('.' is the alias of the current directory)")
         #While path is invalid
@@ -76,7 +143,7 @@ function runEvtxRipper(){
         $FileName = (get-date -Format "yymmdd-") + "AllEvents.csv"
         introwatermark(3)
         write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
-        $AllEvents | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
+        $script:AllEvents | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
         write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
 
     }
@@ -85,6 +152,7 @@ function runEvtxRipper(){
         write-host "You have chosen not to export All Events to a file" -ForegroundColor red
         write-host
     }
+
     $AllEventsPath = $null
     if((read-host "Enter 'Y' to export All Unique Events to csv").ToUpper() -eq "Y"){
         $AllEventsPath = (read-host "Enter path to directory to save file ('.' is the alias of the current directory)")
@@ -96,7 +164,7 @@ function runEvtxRipper(){
         $FileName = (get-date -Format "yymmdd-") + "AllUniqueEvents.csv"
         introwatermark(3)
         write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
-        $AllUniques | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
+        $script:AllUniques | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
         write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
 
     }
@@ -104,6 +172,27 @@ function runEvtxRipper(){
         introwatermark(3)
         write-host "You have chosen not to export All Unique Events to a file" -ForegroundColor red
     }
+
+    $AllEventsPath = $null
+    if((read-host "Enter 'Y' to export Unique Error Codes to csv").ToUpper() -eq "Y"){
+        $AllEventsPath = (read-host "Enter path to directory to save file ('.' is the alias of the current directory)")
+        while(
+            (-not (test-path $AllEventsPath)) -and
+            ( -not ($AllEventsPath -eq ""))){
+                $AllEventsPath = read-host "Enter path to directory to save file ('.' is the alias of the current directory)"
+        }
+        $FileName = (get-date -Format "yymmdd-") + "UniqueErrorCodes.csv"
+        introwatermark(3)
+        write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
+        $script:AllErrorCodes.values | select-object -unique | export-csv ($AllEventsPath +"\"+$FileName)
+        write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
+
+    }
+    else{
+        introwatermark(3)
+        write-host "You have chosen not to export All Unique Errors to a file" -ForegroundColor red
+    }
+
 }
 
 while(($script:workDir -eq $null)){
@@ -114,6 +203,7 @@ while(($script:workDir -eq $null)){
         }
     }
 }
+
 runEvtxRipper
 
 
