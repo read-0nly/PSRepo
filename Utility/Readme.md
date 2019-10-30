@@ -10,7 +10,7 @@ Goes through 2 folders and compares all files, first for name match, then for ha
 Onenote 2016 keeps adding the printer back - if you're adamant not to have it you can add this as a service to run when idle or on logon. It'll delete it every time it runs, if it exists. Might need to remove any echos/write-hosts.
 
 ### EVTX Ripper ##
-Goes through all the EVTX files in a directory, pulls out the oldest occurence of the event for each event ID for each provider, tries to extract error codes in the 0x00000000 format or adsts00+ format, outputs the result to out-gridview, and in the background it checks a list of error code references for a match for each unique error code it found. At the end it offers to save all events to CSV, save unique events to CSV, save a list of all found error codes, and save the resulting found sources for the error codes.
+Goes through all the EVTX files in a directory, pulls out the oldest occurence of the event for each event ID for each provider, tries to extract error codes in the 0x00000000 format or adsts00+ format. It then outputs the first occurrence of each EventID and whatever parsed error code to out-gridview. It checks a list of error code references for a match for each unique error code it found. At the end it offers to save all events to CSV, save unique events to CSV, save a list of all found error codes, and save the resulting found sources for the error codes.
 
 Basically, collect evtx logs, run, wait, then review the sources it spits out.
 
