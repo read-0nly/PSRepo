@@ -9,6 +9,9 @@ Goes through 2 folders and compares all files, first for name match, then for ha
 ### Del Onenote Printer ##
 Onenote 2016 keeps adding the printer back - if you're adamant not to have it you can add this as a service to run when idle or on logon. It'll delete it every time it runs, if it exists. Might need to remove any echos/write-hosts.
 
+### EVTX Ripper ##
+Goes through all the EVTX files in a directory, pulls out the oldest occurence of the event for each event ID for each provider, outputs it to out-gridview, then offers to save as CSV (Both the combined totality of the events and the unique oldest occurences as separate files)
+
 ### Forced Error ##
 Fails consistently, like my love life. Handy to make sure something isn't swallowing output in a way that makes it look like it's working.
 
