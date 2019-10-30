@@ -42,14 +42,15 @@ $ErrorCodeRefURLs = @{
 		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-8",
 		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-9",
 		"https://docs.microsoft.com/en-us/windows/win32/com/com-error-codes-10",
-		"https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values",
-		"https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-vds/5102cc53-3143-4268-ba4c-6ea39e999ab4"
+		"https://docs.microsoft.com/en-us/windows/win32/seccrypto/common-hresult-values"
 	);
 	"AADSTS[0-9]+" = @( #AADSTS codes
 		"https://docs.microsoft.com/en-us/azure/active-directory/develop/reference-aadsts-error-codes",
 		"https://docs.microsoft.com/en-us/azure/active-directory/reports-monitoring/reference-sign-ins-error-codes"
 	)
 }
+$URLCache=@{}
+$ErrorCodeRefURLs.keys.split("`r`n") | %{$ErrorCodeRefURLs[$_] | %{$URLCache.add($_,(Invoke-WebRequest $_).content)}}
 
 function introFetch(){
     introwatermark(-1) 
@@ -111,8 +112,8 @@ function runEvtxRipper(){
     #GetErrorCodes
     introWatermark(2)
     $script:allerrorcodes = @{}
-    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[0]; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
-    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[1]; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
+    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[0] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
+    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[1] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
     introWatermark(3)
     $script:AllUniques = $script:AllGrouped | %{($_.group | sort-object timecreated)[0]}
     $Selection = @("leveldisplayname", "id", "timecreated", "errorcode", "message", "level", "logname", "processid", "machinename", "userid", "containerlog")
@@ -132,7 +133,8 @@ function runEvtxRipper(){
     introWatermark(4)
     $AllEventsPath = $null
     write-host
-    write-host
+    write-host 
+    $FoundSources = ($urlcache.keys.split("`r`n") | %{$curURL = $_; $allerrorcodes.values | select-object -unique | %{if($urlcache[$curURL] -match $_){echo (""+$_+" found on "+$cururl)}else{}};})
 
     if((read-host "Enter 'Y' to export All Events to csv").ToUpper() -eq "Y"){
         $AllEventsPath = (read-host "Enter path to directory to save file ('.' is the alias of the current directory)")
@@ -164,7 +166,7 @@ function runEvtxRipper(){
         $FileName = (get-date -Format "yymmdd-") + "AllUniqueEvents.csv"
         introwatermark(3)
         write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
-        $script:AllUniques | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
+        $Script:UniquesWithError | sort-object timecreated | select-object -property $selection | export-csv ($AllEventsPath +"\"+$FileName)
         write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
 
     }
@@ -181,10 +183,29 @@ function runEvtxRipper(){
             ( -not ($AllEventsPath -eq ""))){
                 $AllEventsPath = read-host "Enter path to directory to save file ('.' is the alias of the current directory)"
         }
-        $FileName = (get-date -Format "yymmdd-") + "UniqueErrorCodes.csv"
+        $FileName = (get-date -Format "yymmdd-") + "UniqueErrorCodes.txt"
         introwatermark(3)
         write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
-        $script:AllErrorCodes.values | select-object -unique | export-csv ($AllEventsPath +"\"+$FileName)
+        $script:AllErrorCodes.values | select-object -unique | out-file ($AllEventsPath +"\"+$FileName)
+        write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
+
+    }
+    else{
+        introwatermark(3)
+        write-host "You have chosen not to export All Unique Errors to a file" -ForegroundColor red
+    }
+    $AllEventsPath = $null    
+    if((read-host "Enter 'Y' to export Error Code Lookup to file").ToUpper() -eq "Y"){
+        $AllEventsPath = (read-host "Enter path to directory to save file ('.' is the alias of the current directory)")
+        while(
+            (-not (test-path $AllEventsPath)) -and
+            ( -not ($AllEventsPath -eq ""))){
+                $AllEventsPath = read-host "Enter path to directory to save file ('.' is the alias of the current directory)"
+        }
+        $FileName = (get-date -Format "yymmdd-") + "ErrorLookup.txt"
+        introwatermark(3)
+        write-host ("Saving to file [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Yellow"
+        $FoundSources | out-file ($AllEventsPath +"\"+$FileName)
         write-host ("Saved [ " + $AllEventsPath +"\"+$FileName+" ]") -ForegroundColor "Green"
 
     }
