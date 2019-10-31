@@ -1,6 +1,9 @@
 param(
     $FolderPath
 )
+
+#region VAR PREP
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $script:workDir = $FolderPath
 $EvtLvlColors = @{
     "Information" = "White";
@@ -52,20 +55,44 @@ $ErrorCodeRefURLs = @{
 $URLCache=@{}
 $ErrorCodeRefURLs.keys.split("`r`n") | %{$ErrorCodeRefURLs[$_] | %{$URLCache.add($_,(Invoke-WebRequest $_).content)}}
 
+#endregion VAR PREP
+
 function introFetch(){
     introwatermark(-1) 
     $script:workDir  =  (read-host "Please enter the path to the directory containing mdmdiagnosticstool output ('.' is the alias of the current directory)")
 }
 
 function introWatermark($i){
-    #V0.1
-        #Created base script that pulls all events and returns unique per ID
-    #V0.2
-        #Created Error Code extractor
-    #V0.3
-        #Autodocs pull
+    <#
+    V0.1
+        Created base script that pulls all events and returns unique per ID
+    V0.2
+        Created Error Code extractor
+    V0.3
+        Autodocs pull
+    V0.4
+        ETL Handling
+
+    TODO: 
+        - Create errorcode CSV to allow vlookup
+        - Parse Autopilot JSON
+        - Review and flag inconsistencies in mdmdiagereport
+        - Review TPMHLInfo file
+        - Extend the error code logic (
+            for instance: 
+                recognizing decimal errors? 
+                Better heuristics so it stops grabbing timestamps? 
+                Full array of found errors for ID?
+            )
+
+    WISHLIST:
+        - Extract all URLs from Bits
+        - Extract IME Script payloads
+
+
+    #>
     $wmLine  = "------------------------------------------------"
-    $wmTitle = "-------:        EVTXRipper  v0.2:        -------"
+    $wmTitle = "-------:        EVTXRipper  v0.4:        -------"
     $wmState = @(
                "-------:   FETCHING WORKING DIRECTORY:   -------",
                "-------:    INITIALIZING EVENT ARRAY:    -------",
@@ -105,18 +132,32 @@ function introWatermark($i){
 function runEvtxRipper(){
     #Load all events from evtx files
     introWatermark(0)
-    $script:AllEvents = get-winevent -path ($workdir + "\*.evtx")
+    $script:AllEvents = new-object System.Collections.ArrayList
+    write-host "Fetching file list..." -NoNewline
+    $evtFiles = (dir @("*.evtx","*.etl"))
+    $evtN = 0
+    write-host ("Finished Fetching! Found " + $evtFiles.count + " files")
+    write-host
+    write-host ("Loading Files")
+    write-host ("|"+(('_')*$evtFiles.count)+"|")
+    write-host "|" -NoNewline
+    $script:AllEvents.addrange((
+        $evtFiles | %{
+            get-winevent -path ($_.fullname) -oldest
+            write-host "█" -ForegroundColor Green -NoNewline
+        }))    
     #Group all events by ID and provider
     introWatermark(1)
-    $script:AllGrouped = ($AllEvents | group id, providername)
+    $script:AllGrouped = ($AllEvents | group id, providername)  
+    $script:AllUniques = $script:AllGrouped | %{($_.group | sort-object timecreated)[0]}
+   
     #GetErrorCodes
     introWatermark(2)
     $script:allerrorcodes = @{}
-    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[0] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
-    $script:AllEvents | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[1] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
+    $script:AllUniques | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[0] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
+    $script:AllUniques | %{$matches = $null; $_.message -match $ErrorCodeRefURLs.keys.split("`r`n")[1] >> $null; if($allErrorCodes.keys -contains $_){}else{if($matches.count -gt 0){$script:allErrorCodes.add($_, ([string]$matches.values))}}}
     introWatermark(3)
-    $script:AllUniques = $script:AllGrouped | %{($_.group | sort-object timecreated)[0]}
-    $Selection = @("leveldisplayname", "id", "timecreated", "errorcode", "message", "level", "logname", "processid", "machinename", "userid", "containerlog")
+   $Selection = @("leveldisplayname", "id", "timecreated", "errorcode", "message", "level", "logname", "processid", "machinename", "userid", "containerlog")
     $Script:UniquesWithError = $script:AllUniques | %{[pscustomobject]@{
         "level"=$_.level;
         "leveldisplayname"=$_.leveldisplayname;
@@ -129,7 +170,8 @@ function runEvtxRipper(){
         "userid"=$_.userid;
         "containerlog"=$_.containerlog;
         "errorcode"=$AllErrorCodes[$_]
-        }} | sort-object timecreated| select-object -Property $Selection| out-gridview -title "All Unique EventIDs - First Occurence"
+        }} 
+    $Script:UniquesWithError | sort-object timecreated| select-object -Property $Selection| out-gridview -title "All Unique EventIDs - First Occurence"
     introWatermark(4)
     $AllEventsPath = $null
     write-host
