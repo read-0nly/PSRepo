@@ -17,6 +17,7 @@ $ErrorCodeRefURLs = @{
 		"https://docs.microsoft.com/en-us/intune/enrollment/troubleshoot-windows-enrollment-errors",
 		"https://docs.microsoft.com/en-us/windows/deployment/windows-autopilot/known-issues",
 		"https://docs.microsoft.com/en-us/sccm/comanage/how-to-monitor",
+		"https://docs.microsoft.com/en-us/windows/win32/mdmreg/mdm-registration-constants",
 		"https://docs.microsoft.com/en-us/windows/win32/taskschd/task-scheduler-error-and-success-constants",
 		"https://docs.microsoft.com/en-us/windows/deployment/upgrade/upgrade-error-codes",
 		"https://docs.microsoft.com/en-us/windows/deployment/update/windows-update-errors",
@@ -72,7 +73,6 @@ function introWatermark($i){
         Autodocs pull
     V0.4
         ETL Handling
-
     TODO: 
         - Create errorcode CSV to allow vlookup
         - Parse Autopilot JSON
@@ -84,12 +84,9 @@ function introWatermark($i){
                 Better heuristics so it stops grabbing timestamps? 
                 Full array of found errors for ID?
             )
-
     WISHLIST:
         - Extract all URLs from Bits
         - Extract IME Script payloads
-
-
     #>
     $wmLine  = "------------------------------------------------"
     $wmTitle = "-------:        EVTXRipper  v0.4:        -------"
