@@ -17,6 +17,7 @@ $ErrorCodeRefURLs = @{
 		"https://docs.microsoft.com/en-us/intune/enrollment/troubleshoot-windows-enrollment-errors",
 		"https://docs.microsoft.com/en-us/windows/deployment/windows-autopilot/known-issues",
 		"https://docs.microsoft.com/en-us/sccm/comanage/how-to-monitor",
+		"https://docs.microsoft.com/en-us/azure/active-directory/devices/troubleshoot-hybrid-join-windows-current",
 		"https://docs.microsoft.com/en-us/intune/fundamentals/troubleshoot-company-resource-access-problems",
 		"https://docs.microsoft.com/en-us/windows/win32/mdmreg/mdm-registration-constants",
 		"https://docs.microsoft.com/en-us/windows/win32/taskschd/task-scheduler-error-and-success-constants",
