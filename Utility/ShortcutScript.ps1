@@ -1,4 +1,5 @@
 #This will effectively be a menu that calls scripts straight from github with iex (iwr ).content
+# iex (iwr "https://bit.ly/36tdMTj").content
 #Meant to simplify calling these things in general - run iex(iwr THISSCRIPT).content then run through the menu and it calls the rest
 
 write-host "1: EVTX Ripper"
