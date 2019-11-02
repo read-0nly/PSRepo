@@ -18,7 +18,7 @@ switch((read-host "Please pick a script to run")){
   '5' {iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutopilotAssigner.ps1").content}
   '6' {iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutoAutopilot.ps1").content}
   '7' {iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AgentLaunch.ps1").content}
-  '8' {iex (iwr "https://github.com/read-0nly/PSRepo/blob/master/Fun/MightyHonk.ps1").content}
-  '9' {iex (iwr "https://github.com/read-0nly/PSRepo/blob/master/Fun/MeteorGame.ps1").content}
+  '8' {iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MightyHonk.ps1").content}
+  '9' {iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MeteorGame.ps1").content}
   
 }
