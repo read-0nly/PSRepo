@@ -1,1 +1,1 @@
-(dir . -recurse)|%{if($_.gettype().name -eq "FileInfo"){mv $_.FullName ($_.Directory.FullName + "\" + $_.name + ".jpg")}else{}}
+(dir (read-host "Please enter the path of the parent folder from which to BatchJPG. It will work recursively.") -recurse)|%{if($_.gettype().name -eq "FileInfo"){mv $_.FullName ($_.Directory.FullName + "\" + $_.name + ".jpg")}else{}}
