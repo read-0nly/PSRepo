@@ -13,17 +13,17 @@ write-host "8: MightyHonk"
 write-host "9: MeteorGame"
 $Selected = ""
 $MenuLoop = $true
-while($MenuLoop){
+while($global:MenuLoop){
   switch((read-host "Please pick a script to run")){  
-    '1' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/EVTXRipper.ps1").content; $MenuLoop = $false}
-    '2' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/InterTransmission.ps1").content; $MenuLoop = $false}
-    '3' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/CompareForDupes.ps1").content; $MenuLoop = $false}
-    '4' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/BatchJPG.ps1").content; $MenuLoop = $false}
-    '5' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutopilotAssigner.ps1").content; $MenuLoop = $false}
-    '6' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutoAutopilot.ps1").content; $MenuLoop = $false}
-    '7' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AgentLaunch.ps1").content; $MenuLoop = $false}
-    '8' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MightyHonk.ps1").content; $MenuLoop = $false}
-    '9' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MeteorGame.ps1").content; $MenuLoop = $false}
+    '1' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/EVTXRipper.ps1").content; $global:MenuLoop = $false}
+    '2' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/InterTransmission.ps1").content; $global:MenuLoop = $false}
+    '3' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/CompareForDupes.ps1").content; $global:MenuLoop = $false}
+    '4' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/BatchJPG.ps1").content; $global:MenuLoop = $false}
+    '5' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutopilotAssigner.ps1").content; $global:MenuLoop = $false}
+    '6' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AutoAutopilot.ps1").content; $global:MenuLoop = $false}
+    '7' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/AgentLaunch.ps1").content; $global:MenuLoop = $false}
+    '8' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MightyHonk.ps1").content; $global:MenuLoop = $false}
+    '9' {$Selected = (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/Fun/MeteorGame.ps1").content; $global:MenuLoop = $false}
   }
 }
 iex $selected
