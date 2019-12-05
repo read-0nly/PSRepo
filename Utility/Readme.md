@@ -2,6 +2,9 @@
 
 ### Async Key Listener Demo ###
 
+
+Listens for W, reports true if it was pressed at any point (timeslice of 10ms) between second-long intervals. Basically a poorman's readkeyasync but for a single key. Google shows a lot of good C# solutions that could be translated to PS as well, but this is the most powershell method I could come up with. Plus I just found out about jobs so now I have to abuse the hell out of them, like when I found out about %{}, or &{}, or pipes.
+
 ### BatchJPG ##
 Changes all the file extensions in a folder to .jpg
 
