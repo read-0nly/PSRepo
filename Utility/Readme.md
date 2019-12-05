@@ -8,6 +8,9 @@ Listens for W, reports true if it was pressed at any point (timeslice of 10ms) b
 ### BatchJPG ##
 Changes all the file extensions in a folder to .jpg
 
+### CLIMenu Test ##
+Building a better Powershell Menu
+
 ### Compare for Dupes ##
 Goes through 2 folders and compares all files, first for name match, then for hash match, and tries to automate clearing out the dupes as much as possible. Defers to user when it's not obvious how to proceed.
 
