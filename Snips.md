@@ -45,7 +45,7 @@ while ($true){
 ```
 
 
-VT100 Formatting Object 
+**VT100 Formatting Object**
 ```powershell
 $VT100 = [pscustomobject]@{
     "Fore" = @{
