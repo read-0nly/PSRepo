@@ -1,4 +1,4 @@
-$global:menu = [pscustomobject]@{
+﻿$global:menu = [pscustomobject]@{
     "MenuState" = 1
     "Settings" = @{
         "Vertical" = $false;
@@ -6,6 +6,8 @@ $global:menu = [pscustomobject]@{
         "Spacer" = "|";
         "SelectionRange" = @(-1,0,1);
         "SelectionColors" = @("DarkRed","DarkGray","DarkGreen")
+        "SelectionColorcodes" = @(([char]27+"[0m"),([char]27+"[101m"),([char]27+"[100m"),([char]27+"[42m"))
+        "ColorMiddle" = 2
     };
     "Cursor" = 1;
     "Items" = @(
@@ -38,6 +40,7 @@ function padString($entry, $width){
     $pad = $menu.Settings["Width"] - $string.length
     $string = $string.PadLeft([int]($pad/2)+$string.length)
     $string = $string.PadRight($width)
+    $string = $menu.settings["selectionColorCodes"][$menu.settings["ColorMiddle"] + $entry.selected] + $string + $menu.settings["selectionColorCodes"][$menu.settings["ColorMiddle"]]
     return $string
 }
 
@@ -50,20 +53,17 @@ function paintMenu($curMenu){
         }
     }
     else{
-        write-host $curMenu.Settings["Spacer"] -backgroundcolor $curMenu.settings["SelectionColors"][$curMenu.settings["SelectionRange"].indexof(0)] -nonewline    
-        $curMenu.Items | %{
-            write-host ((padString $_ $curMenu.Settings["Width"])) -backgroundcolor $curMenu.settings["SelectionColors"][$curMenu.settings["SelectionRange"].indexof($_.selected)] -NoNewline
-            write-host $curMenu.Settings["Spacer"] -backgroundcolor $curMenu.settings["SelectionColors"][$curMenu.settings["SelectionRange"].indexof(0)] -NoNewline
-        }
-        write-host "";
+        $out = $menu.settings["selectionColorCodes"][$menu.settings["ColorMiddle"]]  + $curMenu.Settings["Spacer"] + ($curMenu.Items | %{
+            ((padString $_ $curMenu.Settings["Width"])) +
+            $curMenu.Settings["Spacer"]})+$menu.settings["selectionColorCodes"][0] 
+        cls;    
+        $out
+        echo ""
     }
-    write-host "";
+    echo "";
 }
 
 function paintScreen(){
-    cls;
-    start-sleep -milliseconds 100;
-    
     paintMenu $currentMenu.Value
 
 }
