@@ -47,7 +47,7 @@ try {
 #Set wallpaper with API
 [Wallpaper.Setter]::SetWallpaper($localFilePath)
 # sometimes the wallpaper only changes after the second run, so I'll run it twice!
-sleep -ms 200
+sleep 1
 [Wallpaper.Setter]::SetWallpaper($localFilePath)
 #Refresh wallpaper
 rundll32.exe user32.dll, UpdatePerUserSystemParameters > $null
