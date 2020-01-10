@@ -168,7 +168,8 @@ function play(){
         #Clear the screen
         cls
 
-        #Figure out who's turn it is
+        #Figure out who's turn it is using Modulus. Modulus returns the remainder of division - for instance, 5/3 is 1 Remainder 2 - modulus returns 2 here.
+        #If the turn divides evenly by 2 with no leftover, it's an even number - if it has a remainder of 1, it's odd.
         if (($turn % 2) -eq 0){
             #O's turn, even turn numbers
             #Draw the screen
