@@ -12,5 +12,9 @@ This script will pull all devices that have no OrderID assigned, only ZTDID. Aft
 
 This way, instead of enrolling twice, you target the device for conversion, create a generic autopilot profile that targets devices that contain ZTDID to generate the AAD object, then run this and assign the necessary OrderID so that the correct dynamic group picks it up, so the proper profile applies. Then reset the device and only have to OOBE once.
 
+### Prep PS Intune
+
+Downloads AAD module with install module and the Intune Sample Scripts straight from github then extracts them to $Env.UserProfile\IntuneSamples. Easy snippet to add to scripts that depend on them to make it easier to use the script on other devices.
+
 ### PSVPP ##
 Lets you query VPP directly using the VPP token provided by Apple - handy for troubleshooting issues syncing VPP licenses. If the changes don't come out with this either, the issue is with Apple not providing updated information. If the changes are here but not in your MDM, the MDM isn't updating with the info Apple sends.
