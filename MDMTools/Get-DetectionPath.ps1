@@ -1,4 +1,3 @@
-#Gets the detection paths of all win32 apps in intune
 install-module azuread
 $Workfolder = ([system.environment]::getfolderpath("Desktop")+"\AppControl")
 $IntuneSamplets = $Workfolder + "\IntuneSamples"
@@ -24,4 +23,4 @@ $allapps | where-object {$_.'@odata.type' -like "*win32*"} | %{
     $uri = ("https://graph.microsoft.com/beta/deviceappmanagement/mobileapps/"+$_.id)
     $win32apps +=@((Invoke-RestMethod -Uri $uri -Headers $authToken -Method Get))
 }
-$win32Apps | select displayname,detectionrules | %{[pscustomobject]@{"Name"=$_.displayname;"Path"=($_.detectionRules.path + $_.detectionRules.fileorfoldername)}}
+$PathTable = $win32Apps | select displayname,detectionrules | %{[pscustomobject]@{"Name"=$_.displayname;"Path"=($_.detectionRules.path + $_.detectionRules.fileorfoldername)}}
