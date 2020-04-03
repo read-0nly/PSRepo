@@ -1,5 +1,5 @@
 #Cheap token generation, uses the intune samples scripts to generate the token then uses it to query /me. Returned token is AuthToken
-
+install-script azuread
 $Tenant = (iex (iwr "https://raw.githubusercontent.com/microsoftgraph/powershell-intune-samples/master/CompanyPortalBranding/CompanyPortal_Get.ps1" -usebasicparsing).content)
 
 write-host "Connected to : " -ForegroundColor Green -NoNewline
