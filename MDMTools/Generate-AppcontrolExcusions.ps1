@@ -1,3 +1,8 @@
+# This will go through all the Win32 apps listed in Intune
+# Pull the path from the detection method
+# and create file path rules for each of them then convert to bin
+# This is intended to generate an exclusion file for app control
+# path-based rules are naturally insecure since there's no real integrity check. This may still be enough for your uses.
 install-module azuread
 $Workfolder = ([system.environment]::getfolderpath("Desktop")+"\AppControl")
 $xmlPath = ($WorkFolder+"\Output.xml")
