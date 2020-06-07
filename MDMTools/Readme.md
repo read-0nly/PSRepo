@@ -17,6 +17,9 @@ App Control is a bit of a pain to configure. Sometimes you're ok with trading a 
 
 This will make path based excusions for all your win32 apps, then convert it to bin ready for upload to intune.
 
+### Get-NoncomplianceReport.ps1
+Generates an overview of all failing compliance settings for all devices - basically a report of what needs to be corrected across the org. Uses a fork of the microsoft.graph.intune powershell module because the official one has a bug (detail in code comments)
+
 ### Prep PS Intune
 
 Downloads AAD module with install-module and the Intune Sample Scripts straight from github then extracts them to $Env.UserProfile\IntuneSamples. Easy snippet to add to scripts that depend on them to make it easier to use the script on other devices.
