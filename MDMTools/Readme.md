@@ -12,6 +12,9 @@ This script will pull all devices that have no OrderID assigned, only ZTDID. Aft
 
 This way, instead of enrolling twice, you target the device for conversion, create a generic autopilot profile that targets devices that contain ZTDID to generate the AAD object, then run this and assign the necessary OrderID so that the correct dynamic group picks it up, so the proper profile applies. Then reset the device and only have to OOBE once.
 
+### Fetch-GraphToken.ps1
+Utility script, really. just loads azuread and generates a token the quick and dirty way. handy to reference using iex (iwr "url://").content
+
 ### Generate AppControl Exclusions
 App Control is a bit of a pain to configure. Sometimes you're ok with trading a bit of security for just getting the thing working
 
