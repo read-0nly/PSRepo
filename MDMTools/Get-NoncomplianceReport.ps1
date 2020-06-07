@@ -1,7 +1,11 @@
 ﻿<#
 Returns all failing compliance settings across all devices, as a quick overview of what needs to be corrected on which devices.
 
-Since the official microsoft.graph.intune module's get-devicemanagement_manageddevices_devicecompliancepolicystates cmdlet was broken (when provided a policy ID, it returned nothing - this is because when provided with a policy ID you also need to apend /settingstates, per network trace of Intune UI) I had to rebuild it with a fix to get this to work. Hence the init function downloading my own personal build of the module. If/when https://github.com/microsoft/Intune-PowerShell-SDK/pull/82 gets merged, this whole section can be replaced with a #requires microsoft.graph.intune.
+Since the official microsoft.graph.intune module's get-devicemanagement_manageddevices_devicecompliancepolicystates cmdlet was broken 
+(when provided a policy ID, it returned nothing - this is because when provided with a policy ID you also need to append /settingstates, 
+per network trace of Intune UI) I had to rebuild it with a fix to get this to work. Hence the init function downloading my own personal 
+build of the module. If/when https://github.com/microsoft/Intune-PowerShell-SDK/pull/82 gets merged, this whole section can be replaced 
+with a #requires microsoft.graph.intune.
 #>
 
 
