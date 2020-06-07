@@ -17,6 +17,9 @@ App Control is a bit of a pain to configure. Sometimes you're ok with trading a 
 
 This will make path based excusions for all your win32 apps, then convert it to bin ready for upload to intune.
 
+### Get-DetectionPath.ps1
+Returns the detection paths of all listed win32 apps - allows for quick and dirty generation of applocker files. Not the ideal method because it doesn't check publisher or anything but file-based applocker rules will work for most situations.
+
 ### Get-NoncomplianceReport.ps1
 Generates an overview of all failing compliance settings for all devices - basically a report of what needs to be corrected across the org. Uses a fork of the microsoft.graph.intune powershell module because the official one has a bug (detail in code comments)
 
