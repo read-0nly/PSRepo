@@ -8,22 +8,17 @@ build of the module. If/when https://github.com/microsoft/Intune-PowerShell-SDK/
 with a #requires microsoft.graph.intune.
 #>
 
-
+    #Set root to current folder
+	$root=".\"
+	if($psscriptroot){
+		$root = $PSScriptRoot
+	}
 function init(){
+	param($root)
     cls
     write-host "Initialization Started" -ForegroundColor Green
-    #Set root to current folder
-    $root = ".\"
-    #If it's running as a script, use the script location
-    if($psscriptroot -eq ""){
-        write-host "  Running as script - Using script root" -ForegroundColor yellow
-        $root = $psscriptroot+"\"
-    }
-    else{
-        write-host "  Running directly - Using current folder" -ForegroundColor yellow
-    }
     #Create intunelib folder as necessary
-    $workpath = $root+"intuneLib\"
+    $workpath = $root+"\intuneLib\"
     if(-not (test-path $workpath)){
         write-host "  Module library folder not found - Creating folder" -ForegroundColor Magenta
         mkdir $workpath >> $null
@@ -41,6 +36,9 @@ function init(){
         [system.io.file]::WriteAllBytes(($workpath+"debug.zip"),$moduleBytes)
         write-host "  Module downloaded - Unzipping module" -ForegroundColor Magenta
         #Unzip the release to the intunelib folder
+        while(-not ( test-path ($workpath+"debug.zip") ) ){
+        start-sleep -Milliseconds 10
+        }
         expand-archive ($workpath+"debug.zip") $workpath    
     }
     else{
@@ -115,7 +113,7 @@ function getNonCompliantSettings(){
 }
 
 #Execution
-if(init -eq $true){
+if((init $root)-eq $true){
     #Connect to MSGraph
     write-host "Success - Executing" -ForegroundColor Green
     Connect-MSGraph >> $null    
