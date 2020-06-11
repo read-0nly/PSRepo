@@ -1,6 +1,4 @@
-﻿
-
-$steps =@(
+﻿$steps =@(
 {
 <#   Var Declaration   #>
 <#    Board Display    #>
@@ -35,7 +33,6 @@ $steps =@(
 },
 {
     <# Board Test #>
-    cls
     write-host "Display Test" -ForegroundColor Green
     displayBoard
 },
@@ -52,7 +49,6 @@ $steps =@(
 },
 {
     <# Set Test #>
-    cls
     write-host "setCell Test" -ForegroundColor Red
     setCell $GameBoard 0 0
     displayBoard
@@ -70,7 +66,6 @@ $steps =@(
 },
 {
     <# Clear test #>
-    cls
     write-host "Clear Test" -ForegroundColor Red
     $Gameboard = clearBoard
     displayBoard
@@ -84,7 +79,6 @@ $steps =@(
 },
 {
     <# legal test #>
-    cls
     write-host "legal Test" -ForegroundColor Red
     setCell $GameBoard 0 0
     displayBoard
@@ -129,42 +123,41 @@ $steps =@(
 },
 {
     <# Win test #>
-    cls
     write-host "win Test 1" -ForegroundColor Red
     setCell $GameBoard 0 0
     setCell $GameBoard 0 1
     if(checkWin){write-host "Won!"}else{write-host "NoWin"}
     displayBoard
-    read-host
     $Gameboard = clearBoard
-    cls
+},
+{
     write-host "win Test 2" -ForegroundColor Red
     setCell $GameBoard 0 0
     setCell $GameBoard 0 1
     setCell $GameBoard 0 2
     if(checkWin){write-host "Won!"}else{write-host "NoWin"}
     displayBoard
-    read-host
     $Gameboard = clearBoard
-    cls
+},
+{
     write-host "win Test 3" -ForegroundColor Red
     setCell $GameBoard 0 0
     setCell $GameBoard 1 0
     setCell $GameBoard 2 0
     if(checkWin){write-host "Won!"}else{write-host "NoWin"}
     displayBoard
-    read-host
     $Gameboard = clearBoard
-    cls
+},
+{
     write-host "win Test 4" -ForegroundColor Red
     setCell $GameBoard 0 0
     setCell $GameBoard 1 1
     setCell $GameBoard 2 2
     if(checkWin){write-host "Won!"}else{write-host "NoWin"}
     displayBoard
-    read-host
     $Gameboard = clearBoard
-    cls
+},
+{
     write-host "win Test 5" -ForegroundColor Red
     setCell $GameBoard 2 0
     setCell $GameBoard 1 1
@@ -187,7 +180,6 @@ $steps =@(
 },
 {
     <# Flipping test #>
-    cls
     write-host "flip Test" -ForegroundColor Magenta
     $currentPlayer = flipplayer
     write-host $CurrentPlayer
@@ -255,7 +247,7 @@ $i = 0;
 $steps | %{
 cls
 echo "----------------------------------------------------------"
-echo ("Current Step : "+($i++));
+echo ("Current Step : "+($i));
 echo "----------------------------------------------------------"
 echo ""
 echo ""
@@ -264,6 +256,10 @@ echo ""
 echo ""
 echo "----------------------------------------------------------"
 read-host
+cls
+echo "----------------------------------------------------------"
+echo ("Current Step - Result : "+($i++));
+echo "----------------------------------------------------------"
 echo ""
 echo ""
 echo (.$_)
