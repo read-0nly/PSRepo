@@ -1,4 +1,5 @@
-﻿#Hardcoded params are bad, I know
+# #
+#Hardcoded params are bad, I know
 $global:CurrentHashtable = @{}
 
 $global:CurrentResulttable = @{}
