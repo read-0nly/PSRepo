@@ -1,3 +1,4 @@
+#For analysis of multiple evtx files, looks for 0x00000000 error codes then looks for references to that error code in documentation
 param(
     $FolderPath
 )
