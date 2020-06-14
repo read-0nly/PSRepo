@@ -1,4 +1,4 @@
-#Shamelessly stolen from http://rubli.info/t-blog/2011/06/29/querying-key-states-in-powershell/
+##Shamelessly stolen from http://rubli.info/t-blog/2011/06/29/querying-key-states-in-powershell/
 function Get-KeyState([uint16]$keyCode)
 {
   $signature = '[DllImport("user32.dll")]public static extern short GetKeyState(int nVirtKey);'
