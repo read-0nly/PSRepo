@@ -1,7 +1,7 @@
 ﻿$global:menu = [pscustomobject]@{
     "MenuState" = 1
     "Settings" = @{
-        "Vertical" = $false;
+        "Vertical" = $true;
         "Width"=30;
         "Spacer" = "|";
         "SelectionRange" = @(-1,0,1);
