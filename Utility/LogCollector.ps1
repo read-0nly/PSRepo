@@ -1,9 +1,13 @@
 #Requires -RunAsAdministrator
 # Name: Collect-LogScenario
-# Description: Gathers logs for different troubleshooting scenarios and gathers them in a folder on the desktop for easy attachment. Set the current scenario to the name of the desired scenario, copy-paste the whole thing or save it as new, then run it. Either attach all the contents of the new folder, or Right-Click > Send-to > Compressed (zipped) file then attach that.
+# Description: Gathers logs for different troubleshooting scenarios and gathers them in a folder on the desktop for easy attachment. 
+# Set the current scenario to the name of the desired scenario, copy-paste the whole thing or save it as new, then run it. 
+# Either attach all the contents of the new folder, or Right-Click > Send-to > Compressed (zipped) file then attach that.
 
 #Current log-collecting scenario to run
-[string]$CurrentScenario = "Bitlocker"
+param(
+    [string]$CurrentScenario = "Minimal"
+)
 
 #Generate some values we'll need to generate filenames- the desktop path, the name of the new folder, the full path, the current hostname
 $saveRoot = ([System.Environment]::GetFolderPath("DESKTOP"))
