@@ -1,4 +1,4 @@
-﻿#Cheap token generation, uses the intune samples scripts to generate the token then uses it to query /me. Returned token is AuthToken
+#Cheap token generation, uses the intune samples scripts to generate the token then uses it to query /me. Returned token is AuthToken
 #install-module azuread
 import-module azuread
 
@@ -13,7 +13,7 @@ $steps = @"
         },
         {
             "StepType": "Verify",
-            "Endpoint": "https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations/",
+            "Endpoint": "https://graph.microsoft.com/beta/deviceManagement/deviceConfigurations/?`$filter=startswith(displayName,'BadLocker')",
             "Method": "GET",
             "ExpectedResult": "ewoJIkBvZGF0YS50eXBlIjogIiNtaWNyb3NvZnQuZ3JhcGgud2luZG93czEwRW5kcG9pbnRQcm90ZWN0aW9uQ29uZmlndXJhdGlvbiIsCgkiZGVzY3JpcHRpb24iOiAiIiwKCSJkaXNwbGF5TmFtZSI6ICJCYWRMb2NrZXIiLAoJImJpdExvY2tlckFsbG93U3RhbmRhcmRVc2VyRW5jcnlwdGlvbiI6IHRydWUsCgkiYml0TG9ja2VyRGlzYWJsZVdhcm5pbmdGb3JPdGhlckRpc2tFbmNyeXB0aW9uIjogdHJ1ZSwKCSJiaXRMb2NrZXJFbmNyeXB0RGV2aWNlIjogdHJ1ZSwKCSJiaXRMb2NrZXJTeXN0ZW1Ecml2ZVBvbGljeSI6IHsKCQkic3RhcnR1cEF1dGhlbnRpY2F0aW9uUmVxdWlyZWQiOiB0cnVlLAoJCSJzdGFydHVwQXV0aGVudGljYXRpb25CbG9ja1dpdGhvdXRUcG1DaGlwIjogZmFsc2UsCgkJInN0YXJ0dXBBdXRoZW50aWNhdGlvblRwbVVzYWdlIjogInJlcXVpcmVkIiwKCQkic3RhcnR1cEF1dGhlbnRpY2F0aW9uVHBtUGluVXNhZ2UiOiAiYmxvY2tlZCIsCgkJInN0YXJ0dXBBdXRoZW50aWNhdGlvblRwbUtleVVzYWdlIjogImJsb2NrZWQiLAoJCSJzdGFydHVwQXV0aGVudGljYXRpb25UcG1QaW5BbmRLZXlVc2FnZSI6ICJibG9ja2VkIiwKCQkicmVjb3ZlcnlPcHRpb25zIjogewoJCQkicmVjb3ZlcnlQYXNzd29yZFVzYWdlIjogInJlcXVpcmVkIiwKCQkJInJlY292ZXJ5S2V5VXNhZ2UiOiAiYmxvY2tlZCIsCgkJCSJoaWRlUmVjb3ZlcnlPcHRpb25zIjogdHJ1ZSwKCQkJImVuYWJsZVJlY292ZXJ5SW5mb3JtYXRpb25TYXZlVG9TdG9yZSI6IHRydWUsCgkJCSJyZWNvdmVyeUluZm9ybWF0aW9uVG9TdG9yZSI6ICJwYXNzd29yZE9ubHkiCgkJfQoJfSwKCSJiaXRMb2NrZXJGaXhlZERyaXZlUG9saWN5IjogewoJCSJyZWNvdmVyeU9wdGlvbnMiOiB7CgkJCSJyZWNvdmVyeVBhc3N3b3JkVXNhZ2UiOiAicmVxdWlyZWQiLAoJCQkicmVjb3ZlcnlLZXlVc2FnZSI6ICJibG9ja2VkIiwKCQkJImhpZGVSZWNvdmVyeU9wdGlvbnMiOiB0cnVlLAoJCQkiZW5hYmxlUmVjb3ZlcnlJbmZvcm1hdGlvblNhdmVUb1N0b3JlIjogdHJ1ZSwKCQkJInJlY292ZXJ5SW5mb3JtYXRpb25Ub1N0b3JlIjogInBhc3N3b3JkT25seSIKCQl9Cgl9Cn0="
         }
@@ -40,21 +40,42 @@ function execute-Step(){
 
 function verify-Step(){
     param(
-        [pscustomobject]$step,
-        [pscustomobject]$result
+        [pscustomobject]$step
     )
     $Compare = PSObj2Hashtable (([System.Text.Encoding]::UTF8.getString([convert]::FromBase64String($step.ExpectedResult))) | convertfrom-json)
+    $result = PSObj2Hashtable (Invoke-RestMethod -Uri $step.Endpoint -Headers $authToken -Method $step.Method)
+    hashcompare $result $Compare
 }
 
 function hashCompare(){
     param($result,$expectedresult)
     $Success = $true
-    $expectedresult.keys.split("`n") | %{
-        if($expectedresult[$_].getType().name -eq "Hashtable"){
-            $success = ($success -and (hashCompare $result[$_] $expectedresult[$_]))
+    if($result.value -ne $null){
+        if($result.value.length -gt 0 -and $result.value.length -ne 1){
+            $success = $false
+            for($i = 0; $i -lt $result.value.length;$i++){
+                $resultBool =(hashcompare $result.value[$i] $expectedresult)
+                $Success = ($Success -or $resultBool)
+            }
         }
         else{
-            $success = ($success -and ($result[$_] -eq $expectedresult[$_]))
+            $success = $false
+            $resultBool =(hashcompare $result.value $expectedresult)
+            $Success = ($Success -or $resultBool)
+
+        }
+    }
+    else{
+        $expectedresult.keys.split("`n") | %{
+            if($expectedresult[$_].getType().name -eq "Hashtable"){
+                $success = ($success -and (hashCompare $result[$_] $expectedresult[$_]))
+            }
+            else{
+                $success = ($success -and ($result[$_] -eq $expectedresult[$_]))
+                if($_ -eq "bitLockerEncryptDevice"){
+                $x = $x
+                }
+            }
         }
     }
     return ($success)
@@ -77,4 +98,5 @@ function PSObj2Hashtable(){
     }
     return $PSObj2Hashtable
 }
-
+refreshConnection
+verify-Step $steps.entries[1]
