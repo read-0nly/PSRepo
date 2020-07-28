@@ -109,8 +109,9 @@ write-host
 write-host
 write-host "Hint: https://docs.microsoft.com/en-us/windows/security/information-protection/bitlocker/bitlocker-group-policy-settings#bkmk-unlockpol1"
 
-if((read-host "Enter 'Y' to create template").toLower() -like "y*"){
+if((read-host "Enter 'Y' to create profile (Only create it once, otherwise it'll confuse the validator)").toLower() -like "y*"){
     execute-step $steps.entries[0]
+    write-host "Device Configuration profile of type Endpoint Protection with name Badlocker created for challenge!" -ForegroundColor Green
 }
 
 if(verify-Step $steps.entries[1]){
