@@ -1,3 +1,4 @@
+﻿
 #Cheap token generation, uses the intune samples scripts to generate the token then uses it to query /me. Returned token is AuthToken
 #install-module azuread
 import-module azuread
@@ -99,4 +100,4 @@ function PSObj2Hashtable(){
     return $PSObj2Hashtable
 }
 refreshConnection
-verify-Step $steps.entries[1]
+verify-Step $steps.entries[1] #TEST
