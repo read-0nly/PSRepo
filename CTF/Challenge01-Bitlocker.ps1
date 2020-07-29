@@ -41,6 +41,6 @@ while (-not (verify-Step $steps.entries[1])){
     read-host "Policy is still incorrect. Press enter to check again"
 }
 
-write-host "You did it! Or you cheated. Either way, well done!" -ForegroundColor Yellow
+write-host "You did it! Here's the flag:" -ForegroundColor Yellow
 write-host ([System.Text.Encoding]::UTF8.getString([convert]::FromBase64String("Y3Rme0JMMENLN0gzQjRETDBDS30="))) -ForegroundColor Green
     

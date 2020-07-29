@@ -22,17 +22,20 @@ write-host
 write-host "Hint: https://docs.microsoft.com/en-us/mem/intune/enrollment/apple-mdm-push-certificate-get"
 write-host 
 write-host
-
-$APNS = execute-step $steps.entries[0]
-if($APNS -ne $null){
-    if([datetime]($apns.expirationDateTime) -gt [datetime]::Now.AddDays(30)){
-        write-host "You did it! Or you cheated. Either way, well done!" -ForegroundColor Yellow
-        ([System.Text.Encoding]::UTF8.getString([convert]::FromBase64String("Y3RmezdIM18zWFAxUjQ3MFJ9")))
+$keepLooping = $true
+while($keepLooping){
+    $APNS = execute-step $steps.entries[0]
+    if($APNS -ne $null){
+        if([datetime]($apns.expirationDateTime) -gt [datetime]::Now.AddDays(30)){
+            $keepLooping = $false
+        }
+        else{
+            read-host "It exists but something's wrong. Press enter to try again"
+        }
     }
     else{
-        write-host "It exists but something's wrong"
+        read-host "No APNS detected. Press enter to try again"
     }
 }
-else{
-    write-host "No APNS detected"
-}
+write-host "You did it! Here's the flag:" -ForegroundColor Yellow
+write-host ([System.Text.Encoding]::UTF8.getString([convert]::FromBase64String("Y3RmezdIM18zWFAxUjQ3MFJ9"))) -foregroundcolor Green
