@@ -1,4 +1,9 @@
-﻿
+﻿#
+#
+# To run this the cheap (and dynamic!) way: iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/AutoPad-Base64.ps1" -usebasicparsing).content
+#
+#
+
 $global:menu = [pscustomobject]@{
     "MenuState" = 1
     "Settings" = @{
