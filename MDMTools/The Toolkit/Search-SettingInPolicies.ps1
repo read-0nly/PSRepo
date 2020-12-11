@@ -1,4 +1,5 @@
-﻿#Requires -modules azuread
+﻿#
+#Requires -modules azuread
 import-module azuread
 $Tenant = (iex (iwr "https://raw.githubusercontent.com/microsoftgraph/powershell-intune-samples/master/CompanyPortalBranding/CompanyPortal_Get.ps1" -usebasicparsing).content)
 
