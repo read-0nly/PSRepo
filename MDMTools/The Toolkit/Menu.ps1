@@ -15,70 +15,70 @@ $global:menu = [pscustomobject]@{
     "Items" = @(
         [pscustomobject]@{
             "Name" = "AutoPad-Base64";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\AutoPad-Base64.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/AutoPad-Base64.ps1" -usebasicparsing).content};
             "Selected" = -1;
             "Selectable" = 0;
             "Description" = "When provided unpadded base64, will hammer the padding until it's valid padded base64";
         },    
         [pscustomobject]@{
             "Name" = "AutopilotAssigner";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\AutopilotAssigner.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/AutopilotAssigner.ps1" -usebasicparsing).content};
             "Selected" = -1
             "Selectable" = 0
             "Description" = "Pulls autopilot devices with no OrderID into a csv. Edit it with the desired orderIDs, then continue the script to update the batch";
         },   
         [pscustomobject]@{
             "Name" = "Generate-AppcontrolExcusions";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\Generate-AppcontrolExcusions.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/Generate-AppcontrolExcusions.ps1" -usebasicparsing).content};
             "Selected" = -1
             "Selectable" = 0
             "Description" = "Pulls all the win32 apps defined in Intune and creates app control policies based off the path leading up to the file in the detection rule";
         },    
         [pscustomobject]@{
             "Name" = "Search-SettingInPolicies";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\Search-SettingInPolicies.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/Search-SettingInPolicies.ps1" -usebasicparsing).content};
             "Selected" = -1
             "Selectable" = 0
             "Description" = "Given the name of a setting (https://docs.microsoft.com/en-us/mem/intune/developer/graph-apis-used-by-intune-device-configuration-windows), returns all policies with that setting from Intune";
         }, 
         [pscustomobject]@{
             "Name" = "EVTXRipper";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\EVTXRipper.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/EVTXRipper.ps1" -usebasicparsing).content};
             "Selected" = 0
             "Selectable" = 0
             "Description" = "Given a folder of EVTX files, combines then trims them down to errors then tries to find references of those error codes. Can be a good place to start on weird stuff";
         },    
         [pscustomobject]@{
             "Name" = "HashDuplicateSearch";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\HashDuplicateSearch.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/HashDuplicateSearch.ps1" -usebasicparsing).content};
             "Selected" = 0
             "Selectable" = 0
             "Description" = "(WIP) Creates a file hash database with the intent of then finding all data dupes across a folder structure";
         },   
         [pscustomobject]@{
             "Name" = "LogCollector";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\LogCollector.ps1 "+(read-host "Enter scenario (Minimal,IntuneManagementExtension,Download,Defender,ModernApp,Bitlocker)"))};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/LogCollector.ps1" -usebasicparsing).content};
             "Selected" = 0
             "Selectable" = 0
-            "Description" = "Collects logs depending on the scenario (Minimal,IntuneManagementExtension,Download,Defender,ModernApp,Bitlocker)";
+            "Description" = "Collects logs depending on the scenario";
         },          
         [pscustomobject]@{
             "Name" = "BatchJPG";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\BatchJPG.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/BatchJPG.ps1" -usebasicparsing).content};
             "Selected" = 1
             "Selectable" = 0
             "Description" = "Adds the extension .jpg to all files in a folder - handy for finding images with no extension";
         },    
         [pscustomobject]@{
             "Name" = "InterTransmission";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\InterTransmission.ps1")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/InterTransmission.ps1" -usebasicparsing).content};
             "Selected" = 01
             "Selectable" = 0
             "Description" = "Types the given value or file to the first window matching the given title";
         },   
         [pscustomobject]@{
             "Name" = "Mounter";
-            "Command" = [scriptBlock]{. ($PSScriptRoot + "\Mounter.ps1 `""+(read-host "Enter path to VHD file")+"`"")};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/Mounter.ps1" -usebasicparsing).content};
             "Selected" = 01
             "Selectable" = 0
             "Description" = "Mounts/unmounts the given VHD";
