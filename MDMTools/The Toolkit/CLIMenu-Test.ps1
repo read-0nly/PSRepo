@@ -119,6 +119,11 @@ function paintMenu($curMenu){
 
 function paintScreen(){
     cls
+    write-host
+    write-host "Welcome to The Toolkit" -foregroundcolor red
+    write-host "A mix of utility scripts, mostly for managing azure/intune/devices" -foregroundcolor cyan
+    write-host 
+    write-host
     paintMenu $currentMenu.Value
     write-host
     write-host $global:Menu.Items[$global:Menu.Cursor].Description -foregroundcolor yellow
