@@ -92,7 +92,7 @@ $global:menu = [pscustomobject]@{
         },   
         [pscustomobject]@{
             "Name" = "Set-AADAutologon";
-            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/Mounter.ps1" -usebasicparsing).content.replace([char](65279),' ')};
+            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/SetAADAutoLogon.ps1" -usebasicparsing).content.replace([char](65279),' ')};
             "Selected" = 01
             "Selectable" = 0
             "Description" = "Configures autologon for an azure user";
