@@ -2,8 +2,8 @@
 #Instead, you can target AAD users for kiosk then deploy this alongside the kiosk profile to configure autologon for that kiosk AAD user
 
 $KeyPath = "HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" 	#This should be left as-is
-$DefaultUserName = "user@domain.com" 										                  #Set this to the user's UPN ie. user@tenant.onmicrosoft.com
-$DefaultPassword = "P@ssw0rd!" 											                     	#Set this to the user's password
+$DefaultUserName = (read-host "Enter the UPN of the azure user that should autologon")          #Set this to the user's UPN ie. user@tenant.onmicrosoft.com
+$DefaultPassword = (read-host "Enter the user's password")										#Set this to the user's password
 
 #Make sure any previous configuration is flushed and AutoLogonSID is deleted
 	Remove-ItemProperty -Path $KeyPath -Name "AutoAdminLogon"
