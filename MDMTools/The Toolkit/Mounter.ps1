@@ -5,9 +5,8 @@
 
 Param
 (
-    [Parameter(Mandatory=$true,
-                Position=0)]
-    $dropFile
+    [Parameter(Position=0)]
+    $dropFile = (read-host "Enter path to vhd file").replace("`"","")
 )
 $detail = 'sel vdisk file="'+$dropfile+'"
 detail vdisk'

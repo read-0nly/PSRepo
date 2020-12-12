@@ -6,7 +6,7 @@
 
 #Current log-collecting scenario to run
 param(
-    [string]$CurrentScenario = "Minimal"
+    [string]$CurrentScenario = (read-host "Enter Mode (Minimal, Bitlocker, Download, ModernApp, Defender, IntuneManagementExtension)")
 )
 
 #Generate some values we'll need to generate filenames- the desktop path, the name of the new folder, the full path, the current hostname
