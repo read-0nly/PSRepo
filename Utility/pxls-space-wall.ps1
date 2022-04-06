@@ -1,5 +1,5 @@
 #Set the style and image URL
-[string]$style = "Fit"
+[string]$style = "Fill"
 [string]$url = "https://pxlsfiddle.com/boarddata.png"
 
 #Hashtable of values for setting wallpaper styles
@@ -52,5 +52,5 @@ sleep 1
 [Wallpaper.Setter]::SetWallpaper($localFilePath)
 #Refresh wallpaper
 rundll32.exe user32.dll, UpdatePerUserSystemParameters > $null
-start-sleep 600
+start-sleep 120
 }
