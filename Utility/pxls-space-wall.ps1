@@ -52,5 +52,5 @@ sleep 1
 [Wallpaper.Setter]::SetWallpaper($localFilePath)
 #Refresh wallpaper
 rundll32.exe user32.dll, UpdatePerUserSystemParameters > $null
-start-sleep 120
+start-sleep 600
 }
