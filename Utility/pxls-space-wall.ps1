@@ -1,5 +1,5 @@
 #Set the style and image URL
-[string]$style = "Fill"
+[string]$style = "Tile"
 [string]$url = "https://pxlsfiddle.com/boarddata.png"
 
 #Hashtable of values for setting wallpaper styles
