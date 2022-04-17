@@ -1,4 +1,5 @@
 #[System.Net.HttpListener]::IsSupported
+#[Scriptblock]::Create((iwr https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1 -usebasicparsing).content).Invoke(@(,@($url1,$url2),@($port,$port2)))
 param(
 [string[]]$URIs = @("http://localhost","http://127.0.0.1"),
 [string[]]$Ports=@("80")
