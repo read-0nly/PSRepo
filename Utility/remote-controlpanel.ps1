@@ -33,7 +33,7 @@ function SelectInterface(){
 	$selection = -1
 	$found = $false
 	while(-not $found){
-		cls
+		#cls
 		write-host
 		write-host " Getting interface details" -foregroundcolor green
 		write-host	
@@ -50,7 +50,7 @@ function SelectInterface(){
 }
 
 function InitializeServer(){
-	cls
+	#cls
 	write-host
 	write-host " Initializing listener and menu" -foregroundcolor green
 	write-host	
@@ -71,12 +71,12 @@ function InitializeServer(){
 	$global:commands = $global:defaultCommands
 	if(test-path ./actionMenu.json) {$global:commands = convertfrom-json (cat ./actionMenu.json -raw)}
 
-	cls
+	#cls
 	write-host
 	write-host " Activating Firewall rule" -foregroundcolor green
 	write-host	
 	ActivateFW
-	cls
+	#cls
 	write-host
 	write-host " Starting listener" -foregroundcolor green
 	write-host
@@ -84,7 +84,7 @@ function InitializeServer(){
 }
 
 function ListenLoop(){
-	cls
+	#cls
 	write-host
 	write-host " Listen loop" -foregroundcolor green
 	write-host	
