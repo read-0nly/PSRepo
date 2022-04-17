@@ -243,8 +243,6 @@ function StopServer(){
 
 #endregion
 #region Execution Chain
-ActivateFW
-DeactivateFW
 SelectInterface
 InitializeServer
 ListenLoop
