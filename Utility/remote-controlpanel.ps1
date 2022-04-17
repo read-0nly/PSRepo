@@ -41,7 +41,8 @@ $global:defaultCommands = [PSCustomObject]@{
 		"Default"=[PSCustomObject]@{
 			"1_SaveMenu"=  "convertto-json `$global:commands | out-file ./actionMenu.json"
 			"2_ReloadMenu"=  "`$global:commands = convertfrom-json (cat ./actionMenu.json -raw)"
-			"3_ResetMenu"=  "`$global:commands = `$global:defaultCommands"
+			"3_ResetMenu"=  "`$global:commands = `$global:defaultCommands"			
+			"4_StopServer"=  "`$global:stopLoop=`$true"
 	}
 }
 $global:commands = $global:defaultCommands
