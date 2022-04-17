@@ -1,6 +1,6 @@
 
 <# Quick-run command using a little skullduggery
-[Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?x="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
+[Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?y="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
 #>
 param(
 [string[]]$global:URIs = @("http://localhost","http://127.0.0.1"),
