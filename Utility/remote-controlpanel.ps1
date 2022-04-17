@@ -155,7 +155,9 @@ while(-not $global:stopLoop){
 	$responseBytes= [System.Text.Encoding]::UTF8.GetBytes($responseStr);
 	$resp.ContentLength64=$responseBytes.Length
 	$output=$resp.OutputStream
+	try{
 	$output.Write($responseBytes,0,$responseBytes.Length)
+	}catch{}
 	$output.Close()
 }
 $listener.Stop();
