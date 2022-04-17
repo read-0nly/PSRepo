@@ -5,10 +5,25 @@ param(
 [string[]]$Ports=@("80")
 )
 
-function ActivateFW(){
-	#Get subnet mask
-	$subnetMask = (((Get-NetIPConfiguration)[1].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
+#Get the subnet mask of the chosen interface
+$selection = -1
+$found = $false
+while(-not $found){
+	cls
+	write-host
+	write-host " Getting interface details" -foregroundcolor green
+	write-host	
+	$interfaces = Get-NetIPConfiguration |select-object interfaceindex, interfacealias, interfacedescription
+	$interfaces	|%{write-host ("  ["+$_.interfaceindex +"] "+ $_.Interfacedescription +" {"+$_.interfacealias +"}") -foregroundcolor yellow}
+	
+	try{$selection = [int]::parse((read-host "Enter Interface Index of hosting interface (usually an ethernet)"))}catch{}	
+	$interfaces | %{$found = $found -or ($_.interfaceindex -eq $selection)}	
+	
+}
+$subnetMask = (((Get-NetIPConfiguration | ?{$_.interfaceindex -eq $selection})[0].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
 
+
+function ActivateFW(){
 	$found = $false; 
 	Get-NetFirewallRule  | %{$found = $found -or ($_.displayname -eq "AllowDashbordLAN")}; 
 
@@ -19,11 +34,7 @@ function ActivateFW(){
 		$firewallRule | set-netfirewallrule -LocalPort $Ports -Enabled "True"
 	}
 }
-
 function DeactivateFW(){
-	#Get subnet mask
-	$subnetMask = (((Get-NetIPConfiguration)[1].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
-
 	$found = $false; 
 	Get-NetFirewallRule  | %{$found = $found -or ($_.displayname -eq "AllowDashbordLAN")}; 
 
@@ -32,25 +43,44 @@ function DeactivateFW(){
 	}
 }
 
+
+
+cls
+write-host
+write-host " Initializing listener and menu" -foregroundcolor green
+write-host	
 $URISets = $URIs | %{$uri = $_;$Ports | %{echo ($uri.ToString()+":"+$_.ToString()+"/")}}
 $listener = new-object System.Net.HttpListener
 $URISets | %{$listener.Prefixes.Add($_)}
 
 $global:stopLoop = $false;
+
 $global:defaultCommands = [PSCustomObject]@{
 		"Default"=[PSCustomObject]@{
 			"1_SaveMenu"=  "convertto-json `$global:commands | out-file ./actionMenu.json"
 			"2_ReloadMenu"=  "`$global:commands = convertfrom-json (cat ./actionMenu.json -raw)"
-			"3_ResetMenu"=  "`$global:commands = `$global:defaultCommands"			
+			"3_ResetMenu"=  "`$global:commands = `$global:defaultCommands"
 			"4_StopServer"=  "`$global:stopLoop=`$true"
 	}
 }
 $global:commands = $global:defaultCommands
 if(test-path ./actionMenu.json) {$global:commands = convertfrom-json (cat ./actionMenu.json -raw)}
 
+cls
+write-host
+write-host " Activating Firewall rule" -foregroundcolor green
+write-host	
 ActivateFW
+cls
+write-host
+write-host " Starting listener" -foregroundcolor green
+write-host
 $listener.Start()
 
+cls
+write-host
+write-host " Listen loop" -foregroundcolor green
+write-host	
 while(-not $global:stopLoop){
 	$context = $listener.GetContext();
 	$req = $context.Request
@@ -77,8 +107,7 @@ while(-not $global:stopLoop){
 			if($parameters["cmd"] -ne $null){
 				if($global:commands.($parameters["panel"]).($parameters["cmd"]) -ne $null){
 					write-host "----"
-					$global:commands.($parameters["panel"]).($parameters["cmd"])
-					write-host "----"
+					write-host $global:commands.($parameters["panel"]).($parameters["cmd"]) -foregroundcolor Yellow
 					iex $global:commands.($parameters["panel"]).($parameters["cmd"])
 				}
 			}
@@ -191,5 +220,13 @@ while(-not $global:stopLoop){
 	try{$output.Write($responseBytes,0,$responseBytes.Length)}catch{}
 	$output.Close()
 }
+
+write-host
+write-host " Deactivating Firewall rule" -foregroundcolor magenta
+write-host	
 DeactivateFW
+
+write-host
+write-host " Sopping Listener. Have a nice day!" -foregroundcolor magenta
+write-host	
 $listener.Stop();
