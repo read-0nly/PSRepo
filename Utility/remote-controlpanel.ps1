@@ -227,6 +227,6 @@ write-host
 DeactivateFW
 
 write-host
-write-host " Sopping Listener. Have a nice day!" -foregroundcolor magenta
+write-host " Stopping Listener. Have a nice day!" -foregroundcolor magenta
 write-host	
 $listener.Stop();
