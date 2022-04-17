@@ -1,14 +1,13 @@
 
 <# Quick-run command using a little skullduggery
-[Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?y="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
+[Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?x="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
 #>
 param(
 [string[]]$global:URIs = @("http://localhost","http://127.0.0.1"),
 [string[]]$global:Ports=@("80")
 )
 
-
-	$listener = new-object System.Net.HttpListener
+$listener = new-object System.Net.HttpListener
 
 #region functions
 function ActivateFW(){
@@ -239,12 +238,12 @@ function StopServer(){
 	DeactivateFW
 
 	write-host
-	write-host " Sopping Listener. Have a nice day!" -foregroundcolor magenta
+	write-host " Stopping Listener. Have a nice day!" -foregroundcolor magenta
 	write-host	
 	$listener.Stop();
 }
-
 #endregion
+
 #region Execution Chain
 SelectInterface
 InitializeServer
