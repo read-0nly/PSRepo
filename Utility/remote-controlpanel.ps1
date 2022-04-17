@@ -4,10 +4,38 @@ param(
 [string[]]$URIs = @("http://localhost","http://127.0.0.1"),
 [string[]]$Ports=@("80")
 )
+
+function ActivateFW(){
+	#Get subnet mask
+	$subnetMask = (((Get-NetIPConfiguration)[1].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
+
+	$found = $false; 
+	Get-NetFirewallRule  | %{$found = $found -or ($_.displayname -eq "AllowDashbordLAN")}; 
+
+	if(-not $found){
+		New-NetFirewallRule -DisplayName "AllowDashbordLAN" –RemoteAddress $subnetMask -Direction Inbound -Protocol TCP –LocalPort $Ports -Action Allow -Enabled "True"
+	}else{
+		$firewallRule = Get-NetFirewallRule -DisplayName "AllowDashbordLAN"
+		$firewallRule | set-netfirewallrule -LocalPort $Ports -Enabled "True"
+	}
+}
+
+function DeactivateFW(){
+	#Get subnet mask
+	$subnetMask = (((Get-NetIPConfiguration)[1].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
+
+	$found = $false; 
+	Get-NetFirewallRule  | %{$found = $found -or ($_.displayname -eq "AllowDashbordLAN")}; 
+
+	if($found){
+		Get-NetFirewallRule -DisplayName "AllowDashbordLAN" |set-netfirewallrule -Enabled "False"
+	}
+}
+
 $URISets = $URIs | %{$uri = $_;$Ports | %{echo ($uri.ToString()+":"+$_.ToString()+"/")}}
 $listener = new-object System.Net.HttpListener
 $URISets | %{$listener.Prefixes.Add($_)}
-$listener.Start()
+
 $global:stopLoop = $false;
 $global:defaultCommands = [PSCustomObject]@{
 		"Default"=[PSCustomObject]@{
@@ -18,6 +46,10 @@ $global:defaultCommands = [PSCustomObject]@{
 }
 $global:commands = $global:defaultCommands
 if(test-path ./actionMenu.json) {$global:commands = convertfrom-json (cat ./actionMenu.json -raw)}
+
+ActivateFW
+$listener.Start()
+
 while(-not $global:stopLoop){
 	$context = $listener.GetContext();
 	$req = $context.Request
@@ -155,9 +187,8 @@ while(-not $global:stopLoop){
 	$responseBytes= [System.Text.Encoding]::UTF8.GetBytes($responseStr);
 	$resp.ContentLength64=$responseBytes.Length
 	$output=$resp.OutputStream
-	try{
-	$output.Write($responseBytes,0,$responseBytes.Length)
-	}catch{}
+	try{$output.Write($responseBytes,0,$responseBytes.Length)}catch{}
 	$output.Close()
 }
+DeactivateFW
 $listener.Stop();
