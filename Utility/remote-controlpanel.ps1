@@ -3,19 +3,23 @@
 [Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?x="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
 #>
 param(
-[string[]]$URIs = @("http://localhost","http://127.0.0.1"),
-[string[]]$Ports=@("80")
+[string[]]$global:URIs = @("http://localhost","http://127.0.0.1"),
+[string[]]$global:Ports=@("80")
 )
+
+
+	$listener = new-object System.Net.HttpListener
+
 #region functions
 function ActivateFW(){
 	$found = $false; 
 	Get-NetFirewallRule  | %{$found = $found -or ($_.displayname -eq "AllowDashbordLAN")}; 
 
 	if(-not $found){
-		New-NetFirewallRule -DisplayName "AllowDashbordLAN" –RemoteAddress $subnetMask -Direction Inbound -Protocol TCP –LocalPort $Ports -Action Allow -Enabled "True"
+		New-NetFirewallRule -DisplayName "AllowDashbordLAN" –RemoteAddress $subnetMask -Direction Inbound -Protocol TCP –LocalPort $global:Ports -Action Allow -Enabled "True"
 	}else{
 		$firewallRule = Get-NetFirewallRule -DisplayName "AllowDashbordLAN"
-		$firewallRule | set-netfirewallrule -LocalPort $Ports -Enabled "True"
+		$firewallRule | set-netfirewallrule -LocalPort $global:Ports -Enabled "True"
 	}
 }
 
@@ -46,7 +50,7 @@ function SelectInterface(){
 	}
 	$foundInterfaces  = (Get-NetIPConfiguration | ?{$_.interfaceindex -eq $selection})
 	$subnetMask = (($foundInterfaces[0].ipv4defaultgateway.nexthop).split(".")[0..2])+@("0/24")  -join "."
-	$URIs+= @(,("http://"+$foundInterfaces[0].ipv4address.ipaddress))
+	$global:URIs+= @(,("http://"+$foundInterfaces[0].ipv4address.ipaddress))
 }
 
 function InitializeServer(){
@@ -54,9 +58,8 @@ function InitializeServer(){
 	write-host
 	write-host " Initializing listener and menu" -foregroundcolor green
 	write-host	
-	$URISets = $URIs | %{$uri = $_;$Ports | %{echo ($uri.ToString()+":"+$_.ToString()+"/")}}
-	$listener = new-object System.Net.HttpListener
-	$URISets | %{$listener.Prefixes.Add($_)}
+	$global:URIsets = $global:URIs | %{$uri = $_;$global:Ports | %{echo ($uri.ToString()+":"+$_.ToString()+"/")}}
+	$global:URIsets | %{$listener.Prefixes.Add($_)}
 
 	$global:stopLoop = $false;
 
