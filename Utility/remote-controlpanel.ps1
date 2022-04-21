@@ -1,5 +1,5 @@
 
-<# Quick-run command using a little skullduggery
+<# Quick-run command
 [Scriptblock]::Create((iwr ("https://raw.githubusercontent.com/read-0nly/PSRepo/master/Utility/remote-controlpanel.ps1?x="+(get-date).ticks) -usebasicparsing).content).Invoke(@("http://localhost","http://127.0.0.1"),@("8080"))
 #>
 param(
