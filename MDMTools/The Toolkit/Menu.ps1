@@ -70,13 +70,6 @@ $global:menu = [pscustomobject]@{
             "Description" = "Collects logs depending on the scenario";
         },          
         [pscustomobject]@{
-            "Name" = "BatchJPG";
-            "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/BatchJPG.ps1" -usebasicparsing).content.replace([char](65279),' ')};
-            "Selected" = 1
-            "Selectable" = 0
-            "Description" = "Adds the extension .jpg to all files in a folder - handy for finding images with no extension";
-        },    
-        [pscustomobject]@{
             "Name" = "InterTransmission";
             "Command" = [scriptBlock]{. iex (iwr "https://raw.githubusercontent.com/read-0nly/PSRepo/master/MDMTools/The%20Toolkit/InterTransmission.ps1" -usebasicparsing).content.replace([char](65279),' ')};
             "Selected" = 01
