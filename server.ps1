@@ -1,5 +1,5 @@
 param(
-	$prefixes,
+	$prefixes=@("http://localhost:80/","https://localhost:443"),
 	$responses=@{
 		"/setup"="Get set up, dweeb";
 		"/heartbeat"= "Ah ah ah ah staying alive staying alive";
