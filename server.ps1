@@ -6,7 +6,7 @@ param(
 			"staying-alii-ii-ii-" = "iiive"
 		});
 		"/report/summary"=(@("{`"result`":`"It happened`"`}","application/json"));		
-		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>", [System.Net.Mime.MediaTypeNames+Text]::Xml));
+		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>", [System.Net.Mime.MediaTypeNames+Text]::Xml,@{}, 425));
 	}
 )
 <#
@@ -37,8 +37,14 @@ function processRequest(){
 			write-host "Complex Response" -foregroundcolor red
 			write-host $responses[$url.AbsolutePath][0]
 			write-host $responses[$url.AbsolutePath][1]
-			$responses[$url.AbsolutePath][2]|%{
-				$response.addheader($_,$responses[$url.AbsolutePath][2][$_])
+			if(	$responses[$url.AbsolutePath][2]-ne $null){
+				$responses[$url.AbsolutePath][2].keys|%{
+					write-host $_
+					$response.addheader($_,$responses[$url.AbsolutePath][2][$_])
+				}
+			}
+			if($responses[$url.AbsolutePath][3] -ne $null){
+				$response.statuscode=$responses[$url.AbsolutePath][3]
 			}
 			$response.ContentType=$responses[$url.AbsolutePath][1]
 			$buffer=[byte[]]($responses[$url.AbsolutePath][0]).ToCharArray();	
