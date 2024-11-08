@@ -2,7 +2,9 @@ param(
 	$prefixes = @("http://localhost:80/","https://localhost:443/"),
 	$responses=@{
 		"/setup"="Get set up, dweeb";
-		"/heartbeat"= "Ah ah ah ah staying alive staying alive";
+		"/heartbeat"= @("<i>Ah ah ah ah staying alive staying alive, Ah ah ah ah</i>","text/html",@{
+			"staying-alii-ii-ii-" = "iiive"
+		});
 		"/report/summary"=(@("{`"result`":`"It happened`"`}","application/json"));		
 		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>", [System.Net.Mime.MediaTypeNames+Text]::Xml));
 	}
@@ -28,13 +30,16 @@ function processRequest(){
 		write-host ("We have a response "+$responses[$url.AbsolutePath].GetType().Name+" "+($responses[$url.AbsolutePath].GetType().Name -eq "String")+":") -foregroundcolor yellow
 		if($responses[$url.AbsolutePath].GetType().Name -eq "String"){
 			write-host $responses[$url.AbsolutePath]
-			write-host "rawresponse" -foregroundcolor red
+			write-host "Raw Response" -foregroundcolor red
 			$buffer=[byte[]]($responses[$url.AbsolutePath]).ToCharArray();		
 		}
 		else{	
+			write-host "Complex Response" -foregroundcolor red
 			write-host $responses[$url.AbsolutePath][0]
 			write-host $responses[$url.AbsolutePath][1]
-			write-host "contenttyped" -foregroundcolor red
+			$responses[$url.AbsolutePath][2].keys.split("`n")|%{
+				$response.addheader($_,$responses[$url.AbsolutePath][2][$_])
+			}
 			$response.ContentType=$responses[$url.AbsolutePath][1]
 			$buffer=[byte[]]($responses[$url.AbsolutePath][0]).ToCharArray();	
 		}
