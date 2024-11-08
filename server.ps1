@@ -7,14 +7,21 @@ param(
 		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>", [System.Net.Mime.MediaTypeNames+Text]::Xml));
 	}
 )
-#https://stackoverflow.com/questions/11403333/httplistener-class-with-https-support
+<#
+HTTPS support requires a cert. use the makecert -pe flag when making the ssl cert, the root cert works as written. 
+certlm, not certmgr. import from there, don't install from file.
+https://stackoverflow.com/questions/11403333/httplistener-class-with-https-support
+This guid works `{1AC14E77-02E7-4E5D-B744-2EB1AE5198B7`}
+#>
 function processRequest(){
 	$context=$listener.GetContext();
 	$request=$context.request;
 	$response=$context.response;
 	
 	$url = $request.url	
-	
+	$response.statuscode = 418
+	$buffer=[byte[]]("<h1>Hello world, there's nothing here</h1>").ToCharArray();
+	$response.addheader("Teapot","True")
 	write-host $url.AbsolutePath -foregroundcolor magenta
 	if($responses.containskey($url.AbsolutePath)){
 		$response.statuscode = 200
@@ -31,9 +38,6 @@ function processRequest(){
 			$response.ContentType=$responses[$url.AbsolutePath][1]
 			$buffer=[byte[]]($responses[$url.AbsolutePath][0]).ToCharArray();	
 		}
-	}else{		
-		$buffer=[byte[]]("<h1>Hello world, there's nothing here</h1>").ToCharArray();
-		$response.statuscode = 418
 	}
 	$response.contentlength64=$buffer.length;
 	$output=$response.outputstream;
@@ -49,8 +53,7 @@ $listener = [System.Net.HttpListener]::new()
 $prefixes|%{$listener.Prefixes.Add($_)}
 $listener.start()
 do{
-	write-output (processRequest)
-	
+	write-output (processRequest)	
     if ([Console]::KeyAvailable)
     {
         $keyInfo = [Console]::ReadKey($true)
@@ -58,6 +61,5 @@ do{
 			break
 		}
     }
-
 }while($true)
 $listener.stop()
