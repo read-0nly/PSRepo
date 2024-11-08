@@ -6,7 +6,8 @@ param(
 			"staying-alii-ii-ii-" = "iiive"
 		});
 		"/report/summary"=(@("{`"result`":`"It happened`"`}","application/json"));		
-		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>", [System.Net.Mime.MediaTypeNames+Text]::Xml,@{}, 425));
+		"/report/detailed"=(@("<result message=`"Man, I don't know. You did things. A lot of them. You won doing things. Congratulations.`"><secret>Achievement Unlocked:Easter Egg</secret></result>",
+			[System.Net.Mime.MediaTypeNames+Text]::Xml,@{}, 425));
 	}
 )
 <#
