@@ -37,7 +37,7 @@ function processRequest(){
 			write-host "Complex Response" -foregroundcolor red
 			write-host $responses[$url.AbsolutePath][0]
 			write-host $responses[$url.AbsolutePath][1]
-			$responses[$url.AbsolutePath][2].keys.split("`n")|%{
+			$responses[$url.AbsolutePath][2]|%{
 				$response.addheader($_,$responses[$url.AbsolutePath][2][$_])
 			}
 			$response.ContentType=$responses[$url.AbsolutePath][1]
